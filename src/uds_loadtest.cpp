@@ -15,37 +15,30 @@
 
 class progress_bar{
 private:
-  const long max;
-  volatile long counter;
   boost::progress_display bar;
   boost::mutex io_mutex;
 public:
-  progress_bar(long _max) : max(_max), counter(0), bar(_max)  {};
-
-  long increment() {
+  static const long COMPLETE = -1;
+  progress_bar(long _max) : bar(_max)  {};
+  inline long increment() {
     boost::mutex::scoped_lock lock(io_mutex);
-    if (max <= counter) {
-      return -1;
-    }
-    counter++;
-    ++bar;
-    return counter;
+    return bar.expected_count() <= bar.count() ? COMPLETE : ++bar;
   }
 };
 
 void run(std::string message, progress_bar *bar, std::string end_point) {
   boost::asio::io_service io_service;
   stream_protocol::socket s(io_service);
+
   try {
     s.connect(stream_protocol::endpoint(end_point));
-    while(bar->increment() != -1) {
+    char response[1024];
+    while(bar->increment() != bar->COMPLETE) {
       boost::asio::write(s, boost::asio::buffer(message));
-      char response[1024];
       boost::asio::read(s,
         boost::asio::buffer(response, 1024),
         boost::asio::transfer_at_least(4));
     }
-
     s.close();
   } catch(std::exception const&  e) {
     std::cerr << e.what() << std::endl;
