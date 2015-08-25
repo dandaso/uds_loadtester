@@ -10,7 +10,7 @@
 
 ## Build
 
-    Make
+    make
 
 ## Usage
 
