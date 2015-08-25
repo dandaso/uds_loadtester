@@ -22,7 +22,7 @@
 
 ## Run client
 
-    ./uds_loadtes --sock=/tmp/netty.sock --requests=1000000 -c 4
+    ./uds_loadtest --sock=/tmp/netty.sock --requests=1000000 -c 4
 
 ## Result
 
