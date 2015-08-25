@@ -2,7 +2,7 @@
 
 ## uds_loadtest
  
-    load tester for unix domain socket
+    load test for unix domain socket
 
 ## Install
 
