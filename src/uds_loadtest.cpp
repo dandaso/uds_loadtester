@@ -68,19 +68,19 @@ int main(int argc, char** argv)  {
     ("sock,s", po::value<std::string>(&sock), "Path to unix domain socket")
     ("message,m", po::value<std::string>(&message), "Send message to socket");
 
-    po::variables_map vm;
-    try {
-      po::store(po::parse_command_line(argc, argv, desc), vm);
-      po::notify(vm);
-    } catch(std::exception& e) {
-      std::cerr << e.what() << std::endl;
-      std::cout << desc << std::endl;
-      return 1;
-    }
-    if (vm.count("help")) {
-      std::cout << desc << std::endl;
-      return 1;
-    }
+  po::variables_map vm;
+  try {
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+  } catch(std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cout << desc << std::endl;
+    return 1;
+  }
+  if (vm.count("help")) {
+    std::cout << desc << std::endl;
+    return 1;
+  }
 
   progress_bar bar(num_of_requests);
   boost::timer t;
